@@ -21,8 +21,8 @@ if len(sessions) == 0:
     print("No recent sessions...")
     exit()
 
-#print("Sleeping for 15 minutes to allow fw-heudiconv to finish...")
-#sleep(900) # sleep for 15 minutes (about how long it takes for fw-heudiconv to queue and run)
+# print("Sleeping for 3 minutes to allow fw-heudiconv to start...")
+# sleep(180)
 
 for session in sessions:
     session = session.reload()

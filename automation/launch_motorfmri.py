@@ -12,7 +12,8 @@ date_str = datetime.strftime(datetime.now(), '%m-%d-%Y_%H:%M:%S')
 fw = flywheel.Client()
 project = fw.lookup("detre_group/RECOVER")
 sessions = [s for s in project.sessions() if s.created > date]
-gear = fw.lookup('gears/motorfmri/0.1.7')
+version='0.1.10'
+gear = fw.lookup(f'gears/motorfmri/{version}')
 
 # Exit if there are no recent sessions
 if len(sessions) == 0:
@@ -53,7 +54,7 @@ for session in sessions:
             print(inputs)
             print(config)
 
-            label=f"motorfmri_0.0.10_{date_str}_autolaunch"
+            label=f"motorfmri_{version}_{date_str}_autolaunch"
 
             try:
                 analysis_id = gear.run(analysis_label=label, config=config, inputs=inputs, destination=session)

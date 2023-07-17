@@ -6,7 +6,7 @@ import json
 from datetime import datetime, timedelta, timezone
 
 # Date stuff
-date = datetime.now(timezone.utc) - timedelta(hours=2)
+date = datetime.now(timezone.utc) - timedelta(hours=24)
 date_str = datetime.strftime(datetime.now(), '%m-%d-%Y_%H:%M:%S')
 
 # Flywheel

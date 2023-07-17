@@ -5,12 +5,8 @@ import logging
 
 from datetime import datetime, timedelta, timezone
 
-#os.system("touch /home/will/Projects/motor-imagery/automation/logs/test.txt")
 # Date stuff
 date = datetime.now(timezone.utc) - timedelta(hours=1)
-#date = datetime.today() - timedelta(hours=24)
-#date_str = "{:4d}-{:02d}-{:02d}".format(date.year,date.month,date.day)
-#date_str = datetime.strftime(date, '%Y-%m-%d')
 date_str = datetime.strftime(datetime.now(), '%m-%d-%Y_%H:%M:%S')
 
 # Flywheel
@@ -18,7 +14,6 @@ fw = flywheel.Client()
 project = fw.lookup("detre_group/RECOVER")
 print(project.label)
 sessions = [s for s in project.sessions() if s.created > date]
-#(sessions)
 gear = fw.lookup('gears/fw-heudiconv/0.2.15_0.4.3')
 heuristic = project.get_file('motor_heuristic4.py')
 
@@ -27,14 +22,18 @@ if len(sessions) == 0:
     print("No recent sessions...")
     exit()
 
-sleep(1500) # buffer time for dicom classification
+#sleep(1500) # buffer time for dicom classification
 
 for session in sessions:
+    # replace special characters in session label
+    session = session.reload()
+    session.update(label=session.label.replace(' ','x').replace('^','x'))
     session = session.reload()
     print(session.label)
+
     # check if heudiconv has already been run
     for analysis in session.analyses:
-        states = [ "complete", "running", "failed"]
+        states = ["complete", "queued", "running", "failed"]
         if "heudiconv" in analysis.label and any(analysis.job['state'] == s for s in states):
             print("Already run or running")
             print(analysis.job['state'])
